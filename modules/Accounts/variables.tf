@@ -21,9 +21,9 @@ variable "users" {
     country      = string # Country of the user
     mobile_phone = string # Mobile phone number of the user
     domain       = string # Domain name for the user email
+    groups = optional(list(string), []) # Groups to which the user belongs
     # licenses = optional(list(string), []) # List of licenses assigned to the user
     # administrative_unit = string # Administrative unit to which the user belongs
-    # groups = optional(list(string), []) # Groups to which the user belongs
   }))
 
     validation {

@@ -19,6 +19,15 @@ resource "azuread_user" "users" {
   force_password_change = true
 }
 
+module "user_groups" {
+  for_each = { for user in var.users : user.upn => user }
+  source = "../GroupMembers"
+
+  tenant_id = var.tenant_id
+  user     = azuread_user.users[each.key].object_id
+  groups  = each.value.groups
+}
+
 resource "random_password" "passwords" {
   for_each = { for user in var.users : user.upn => user }
   length   = 16
