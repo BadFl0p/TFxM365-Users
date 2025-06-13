@@ -36,3 +36,14 @@ resource "random_password" "passwords" {
   upper    = true
   numeric  = true
 }
+
+data "azuread_administrative_unit" "administrative_unit_id" {
+  for_each = { for user in var.users : user.upn => user }
+  display_name = each.value.administrative_unit
+}
+
+resource "azuread_administrative_unit_member" "mapping_member_au" {
+  for_each = {for user in var.users : user.upn => user }
+  administrative_unit_object_id = data.azuread_administrative_unit.administrative_unit_id[each.key].object_id
+  member_object_id              = azuread_user.users[each.key].object_id
+}
