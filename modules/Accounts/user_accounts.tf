@@ -5,7 +5,7 @@ resource "azuread_user" "users" {
   display_name          = "${each.value.first_name} ${each.value.last_name} ${each.value.company}"
   given_name            = each.value.first_name
   surname               = each.value.last_name
-  mail                  = each.value.email
+  mail                  = "${lower(each.value.first_name)}.${lower(each.value.last_name)}@${each.value.domain}"
   company_name          = each.value.company
   job_title             = each.value.job_title
   division = each.value.division

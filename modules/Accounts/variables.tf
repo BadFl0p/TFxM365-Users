@@ -10,7 +10,6 @@ variable "users" {
     display_name = string
     first_name   = string
     last_name    = string
-    email        = string # This is the primary email for the user
     company      = string # Company name for the user
     upn          = string # Same as user email
     job_title    = string # Job title of the user
@@ -21,8 +20,23 @@ variable "users" {
     city         = string # City of the user
     country      = string # Country of the user
     mobile_phone = string # Mobile phone number of the user
+    domain       = string # Domain name for the user email
     # licenses = optional(list(string), []) # List of licenses assigned to the user
     # administrative_unit = string # Administrative unit to which the user belongs
     # groups = optional(list(string), []) # Groups to which the user belongs
   }))
+
+    validation {
+        condition = alltrue([
+            for user in var.users : can(regex("^[A-Z][a-z]+$", user.first_name))
+        ])
+        error_message = "first_name must start with an uppercase letter followed by lowercase letters only, without accents."
+    }
+
+    validation {
+        condition = alltrue([
+            for user in var.users : can(regex("^[A-Z]+$", user.last_name))
+        ])
+        error_message = "last_name must be all uppercase letters without accents."
+    }
 }
